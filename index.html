@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Vue.js App</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="container">
+        <h1>チュートリアルToDoリスト</h1>
+
+        <!-- 絞り込みしたかったんですが諦めました -->
+        <!-- <div class="filter">
+          <div class="filter__wrapper">
+            <input type="radio" name="progress" value="true" id="running" /><label @click="narrowDown" for="running">作業中</label>
+          </div>
+          <div class="filter__wrapper">
+            <input type="radio" name="progress" value="false" id="completed" /><label @click="narrowDown" for="completed">完了</label>
+          </div>
+          <div class="filter__wrapper"><input type="radio" name="progress" value="null" id="all" /><label @click="narrowDown" for="all">すべて</label></div>
+        </div> -->
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>タスク</th>
+              <th>状態</th>
+              <th>-</th>
+              <th>-</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="second" v-for="todo in todos" v-bind:key="todo.id" v-bind:class="{completed: todo.state}">
+              <td>{{todo.id}}</td>
+              <td>{{todo.item}}</td>
+              <!-- @click="changeState(todo)" -->
+              <td>
+                <button v-bind:class="{green : todo.state, yellow :!todo.state}" v-if="!todo.state" @click="changeState(todo)">作業中</button>
+                <button v-bind:class="{green : todo.state, yellow :!todo.state}" v-if="todo.state" @click="changeState(todo)">完了</button>
+              </td>
+              <td><button class="addButton" @click="insertUpdateTodo(todo)" v-bind:disabled="showUpdateForm">編集</button></td>
+              <td><button class="deleteButton" @click="removeTodo(todo.id)" v-bind:disabled="showUpdateForm">削除</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <transition>
+        <div class="container updateForm" v-if="showUpdateForm">
+          <p>タスクを編集する</p>
+          <input class="addForm" type="text" v-model="updateTodo.item" />
+          <button @click="updateTodoFunc(updateTodo.id)">確定</button>
+          <button @click="leaveUpdateForm">戻る</button>
+        </div>
+      </transition>
+
+      <!-- 初期描画時にアニメーションを加える -->
+      <transition appear>
+        <div class="container">
+          <p>ここにtodoを入れる</p>
+          <p v-if="caution" v-bind:class="{isActive : caution}">※項目を入力してください</p>
+          <input class="addForm" type="text" v-model="todo.item" />
+          <button @click="addTodo">追加</button>
+        </div>
+      </transition>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="js/script.js"></script>
+  </body>
+</html>
